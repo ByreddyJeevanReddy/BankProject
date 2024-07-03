@@ -1,68 +1,63 @@
-public class Bank implements BankAccount{
-    import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
 
-    public class Bank implements BankOperations {
-        private List<BankAccount> accounts;
+public class Bank {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Bank bank = new Bank();
 
-        public Bank() {
-            accounts = new ArrayList<>();
-        }
+        while (true) {
+            System.out.println("Menu:");
+            System.out.println("1. Open Account");
+            System.out.println("2. Close Account");
+            System.out.println("3. Deposit");
+            System.out.println("4. Withdraw");
+            System.out.println("5. Display Accounts");
+            System.out.println("6. Exit");
+            System.out.print("Choose an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
 
-        @Override
-        public void openAccount(String accountNumber, String accountHolderName, double initialBalance) {
-            BankAccount newAccount = new BankAccount(accountNumber, accountHolderName, initialBalance);
-            accounts.add(newAccount);
-            System.out.println("Account opened successfully.");
-        }
-
-        @Override
-        public void closeAccount(String accountNumber) {
-            BankAccount accountToRemove = null;
-            for (BankAccount account : accounts) {
-                if (account.getAccountNumber().equals(accountNumber)) {
-                    accountToRemove = account;
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter account number: ");
+                    String accNumber = scanner.nextLine();
+                    System.out.print("Enter account holder name: ");
+                    String accHolder = scanner.nextLine();
+                    System.out.print("Enter initial balance: ");
+                    double initBalance = scanner.nextDouble();
+                    bank.openAccount(new BankAccount(accNumber, accHolder, initBalance));
                     break;
-                }
-            }
-            if (accountToRemove != null) {
-                accounts.remove(accountToRemove);
-                System.out.println("Account closed successfully.");
-            } else {
-                System.out.println("Account not found.");
-            }
-        }
-
-        @Override
-        public void deposit(String accountNumber, double amount) {
-            for (BankAccount account : accounts) {
-                if (account.getAccountNumber().equals(accountNumber)) {
-                    account.deposit(amount);
+                case 2:
+                    System.out.print("Enter account number to close: ");
+                    String closeAccNumber = scanner.nextLine();
+                    bank.closeAccount(closeAccNumber);
+                    break;
+                case 3:
+                    System.out.print("Enter account number to deposit: ");
+                    String depositAccNumber = scanner.nextLine();
+                    System.out.print("Enter amount to deposit: ");
+                    double depositAmount = scanner.nextDouble();
+                    bank.deposit(depositAccNumber, depositAmount);
+                    break;
+                case 4:
+                    System.out.print("Enter account number to withdraw: ");
+                    String withdrawAccNumber = scanner.nextLine();
+                    System.out.print("Enter amount to withdraw: ");
+                    double withdrawAmount = scanner.nextDouble();
+                    bank.withdraw(withdrawAccNumber, withdrawAmount);
+                    break;
+                case 5:
+                    bank.displayAccounts();
+                    break;
+                case 6:
+                    System.out.println("Exiting application.");
+                    scanner.close();
                     return;
-                }
+                default:
+                    System.out.println("Invalid option. Please try again.");
             }
-            System.out.println("Account not found.");
         }
-
-        @Override
-        public void withdraw(String accountNumber, double amount) {
-            for (BankAccount account : accounts) {
-                if (account.getAccountNumber().equals(accountNumber)) {
-                    account.withdraw(amount);
-                    return;
-                }
-            }
-            System.out.println("Account not found.");
-        }
-
-        @Override
-        public void displayAccounts() {
-            if (accounts.isEmpty()) {
-                System.out.println("No accounts to display.");
-            } else {
-                for (BankAccount account : accounts) {
-                    System.out.println(account);
-                }
-            }
     }
 }
+
+
